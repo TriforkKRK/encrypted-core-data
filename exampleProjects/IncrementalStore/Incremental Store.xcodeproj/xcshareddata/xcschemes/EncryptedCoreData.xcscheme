@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BD5EFF415EE5DDF00333320"
-               BuildableName = "Incremental Store Demo.app"
-               BlueprintName = "Incremental Store Demo"
+               BlueprintIdentifier = "AF3779BC1CEDC4FC00CE75EF"
+               BuildableName = "EncryptedCoreData.framework"
+               BlueprintName = "EncryptedCoreData"
                ReferencedContainer = "container:Incremental Store.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "440E851019B3A1B0002542D1"
-               BuildableName = "Tests.xctest"
-               BlueprintName = "Tests"
-               ReferencedContainer = "container:Incremental Store.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BD5EFF415EE5DDF00333320"
-            BuildableName = "Incremental Store Demo.app"
-            BlueprintName = "Incremental Store Demo"
-            ReferencedContainer = "container:Incremental Store.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -61,22 +42,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BD5EFF415EE5DDF00333320"
-            BuildableName = "Incremental Store Demo.app"
-            BlueprintName = "Incremental Store Demo"
+            BlueprintIdentifier = "AF3779BC1CEDC4FC00CE75EF"
+            BuildableName = "EncryptedCoreData.framework"
+            BlueprintName = "EncryptedCoreData"
             ReferencedContainer = "container:Incremental Store.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "-com.apple.CoreData.SQLDebug 1"
-            isEnabled = "NO">
-         </CommandLineArgument>
-      </CommandLineArguments>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -86,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3BD5EFF415EE5DDF00333320"
-            BuildableName = "Incremental Store Demo.app"
-            BlueprintName = "Incremental Store Demo"
+            BlueprintIdentifier = "AF3779BC1CEDC4FC00CE75EF"
+            BuildableName = "EncryptedCoreData.framework"
+            BlueprintName = "EncryptedCoreData"
             ReferencedContainer = "container:Incremental Store.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
