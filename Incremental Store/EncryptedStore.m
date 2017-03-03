@@ -694,54 +694,66 @@ static NSString * const EncryptedStoreMetadataTableName = @"meta";
                 }
                 sqlite3_finalize(statement);
                 
-                // run migrations
-                NSDictionary *options = [self options];
-                if ([[options objectForKey:NSMigratePersistentStoresAutomaticallyOption] boolValue] &&
-                    [[options objectForKey:NSInferMappingModelAutomaticallyOption] boolValue]) {
-                    NSManagedObjectModel *newModel = [[self persistentStoreCoordinator] managedObjectModel];
-                    
-                    // check that a migration is required first:
-                    if ([newModel isConfiguration:nil compatibleWithStoreMetadata:metadata]){
-                        return YES;
-                    }
-                    
-                    // load the old model:
-                    NSMutableArray *bundles = [NSMutableArray array];
-                    [bundles addObject:[NSBundle mainBundle]];
-                    NSManagedObjectModel *oldModel = [NSManagedObjectModel mergedModelFromBundles:bundles
-                                                                                 forStoreMetadata:metadata];
-                    
-                    if (oldModel && newModel) {
-                        
-                        // no migration is needed if the old and new models are identical:
-                        if ([[oldModel entityVersionHashesByName] isEqualToDictionary:[newModel entityVersionHashesByName]]) {
-                            return YES;
-                        }
-                        
-                        // run migrations
-                        if (![self migrateFromModel:oldModel toModel:newModel error:error]) {
-                            return NO;
-                        }
-                        
-                        // update metadata
-                        NSMutableDictionary *mutableMetadata = [metadata mutableCopy];
-                        [mutableMetadata setObject:[newModel entityVersionHashesByName] forKey:NSStoreModelVersionHashesKey];
-                        [self setMetadata:mutableMetadata];
-                        if (![self saveMetadata]) {
-                            if (error) { *error = [self databaseError]; }
-                            return NO;
-                        }
-                        
-                    } else {
-                        NSLog(@"Failed to create NSManagedObject models for migration.");
-                        if (error) {
-                            NSDictionary * userInfo = @{EncryptedStoreErrorMessageKey : @"Missing old model, cannot migrate database"};
-                            *error = [NSError errorWithDomain:EncryptedStoreErrorDomain code:EncryptedStoreErrorMigrationFailed userInfo:userInfo];
-                        }
-                        return NO;
-                    }
+                // check that a migration is required first:
+                NSManagedObjectModel *newModel = [[self persistentStoreCoordinator] managedObjectModel];
+                if ([newModel isConfiguration:nil compatibleWithStoreMetadata:metadata]){
+                    return YES;
                 }
                 
+                // run migrations
+                NSDictionary *options = [self options];
+                if ([[options objectForKey:NSMigratePersistentStoresAutomaticallyOption] boolValue]) {
+                    if ([[options objectForKey:NSInferMappingModelAutomaticallyOption] boolValue]) {
+                        
+                        // load the old model:
+                        NSMutableArray *bundles = [NSMutableArray array];
+                        [bundles addObject:[NSBundle mainBundle]];
+                        NSManagedObjectModel *oldModel = [NSManagedObjectModel mergedModelFromBundles:bundles
+                                                                                     forStoreMetadata:metadata];
+                        
+                        if (oldModel && newModel) {
+                            
+                            // no migration is needed if the old and new models are identical:
+                            if ([[oldModel entityVersionHashesByName] isEqualToDictionary:[newModel entityVersionHashesByName]]) {
+                                return YES;
+                            }
+                            
+                            // run migrations
+                            if (![self migrateFromModel:oldModel toModel:newModel error:error]) {
+                                return NO;
+                            }
+                            
+                            // update metadata
+                            NSMutableDictionary *mutableMetadata = [metadata mutableCopy];
+                            [mutableMetadata setObject:[newModel entityVersionHashesByName] forKey:NSStoreModelVersionHashesKey];
+                            [self setMetadata:mutableMetadata];
+                            if (![self saveMetadata]) {
+                                if (error) { *error = [self databaseError]; }
+                                return NO;
+                            }
+                            
+                        } else {
+                            NSLog(@"Failed to create NSManagedObject models for migration.");
+                            if (error) {
+                                NSDictionary * userInfo = @{EncryptedStoreErrorMessageKey : @"Missing old model, cannot migrate database"};
+                                *error = [NSError errorWithDomain:EncryptedStoreErrorDomain code:EncryptedStoreErrorMigrationFailed userInfo:userInfo];
+                            }
+                            return NO;
+                        }
+                    }
+                    else {
+                        // automatic inference of mapping model is not allowed
+                        NSAssert(NO, @"Not implemented");
+                    }
+                }
+                else {
+                    // lightweight migration is not allowed
+                    if (error) {
+                        NSDictionary * userInfo = @{NSLocalizedDescriptionKey : @"Reason: The operation couldn’t be completed. (Cocoa error 134100.)"};
+                        *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSPersistentStoreIncompatibleVersionHashError userInfo:userInfo];
+                    }
+                    return NO;
+                }
             }
             
             // this is a new store
